@@ -53,9 +53,13 @@ def chat_box_insert(message):
     chat_box.yview(tk.END)
 
 def send_message(event=None):
+    """Enviar mensaje al servidor."""
     global connected
     message = message_entry.get().strip()
-    if connected and message:
+    if not message:
+        # Evitar enviar mensajes vacíos
+        return
+    if connected:
         try:
             chat_box_insert(f"Tú: {message}")  # Mostrar mensaje localmente
             client.send(message.encode('ascii'))
@@ -66,6 +70,7 @@ def send_message(event=None):
         chat_box_insert("No estás conectado al servidor.")
 
 def disconnect():
+    """Desconectar del servidor."""
     global connected
     if connected:
         try:
@@ -77,6 +82,7 @@ def disconnect():
     root.quit()
 
 def ask_nickname():
+    """Solicitar apodo del usuario."""
     return simpledialog.askstring("Nickname", "Elige un apodo:") or "Anónimo"
 
 root = tk.Tk()
